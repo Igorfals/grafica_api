@@ -19,7 +19,8 @@ model User {
 model Order {
   id          Int      @id @default(autoincrement()) @map("id_order")
   clientName  String   @map("client_name")
-  createdAt   DateTime @default(now()) @map("created_at")
+  estimation  DateTime @map("estimation_date")
+  date        DateTime @map("date")
   address     String
   cellphone   String
   city        String
