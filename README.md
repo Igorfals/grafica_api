@@ -25,37 +25,38 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+📦 Project Setup
+npm install Install all dependencies defined in package.json.
 
-```bash
-$ npm install
-```
+PostgreSQL required Ensure you have PostgreSQL installed and running on your machine. You can download it from https://www.postgresql.org/download/ or install via Docker.
 
-## Compile and run the project
+⚙️ Running the Project (Development Mode)
+docker compose up -d Starts the containers in detached mode (database and other services).
 
-```bash
-# development
-$ npm run start
+docker ps Lists running containers — helpful for checking PostgreSQL status.
 
-# watch mode
-$ npm run start:dev
+npm run start:dev Starts the NestJS application in development mode with hot-reloading.
 
-# production mode
-$ npm run start:prod
-```
+npm run migrate:dev Applies the Prisma migration to the database using the name init.
 
-## Run tests
+🧪 Testing
+npm run test Runs unit tests.
 
-```bash
-# unit tests
-$ npm run test
+npm run test:e2e Runs end-to-end integration tests.
 
-# e2e tests
-$ npm run test:e2e
+npm run test:cov Generates test coverage report.
 
-# test coverage
-$ npm run test:cov
-```
+🚀 Production Build & Run
+npm run build Compiles the application for production.
+
+npm run start:prod Starts the compiled app in production mode.
+
+🔧 Useful Scripts
+npm run migrate:dev Runs prisma migrate dev with the migration name init. Be sure your database is running.
+
+docker compose down Stops and removes Docker containers.
+
+npx prisma studio Opens Prisma’s visual data editor for managing your database.
 
 ## Deployment
 
