@@ -25,50 +25,31 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+📦 Project Setup Pré-requisitos: - Node.js (v18+) - PostgreSQL (https://www.postgresql.org/download/) ou Docker Instalação: 
 
-```bash
-$ npm install
-```
+```bash git clone https://github.com/seu-repo/project.git && cd project && npm install ``` 
 
-## Compile and run the project
+⚙️ Running the Project 
 
-```bash
-# development
-$ npm run start
+```bash docker compose up -d # Inicia containers npm run migrate:dev # Aplica migrações Prisma npm run start:dev # Inicia app com hot-reload docker ps # Verifica containers ativos ``` 
 
-# watch mode
-$ npm run start:dev
+🧪 Testing 
 
-# production mode
-$ npm run start:prod
-```
+```bash npm run test # Testes unitários npm run test:e2e # Testes end-to-end npm run test:cov # Cobertura de testes ``` 
 
-## Run tests
+🚀 Production 
 
-```bash
-# unit tests
-$ npm run test
+```bash npm run build # Compila para produção npm run start:prod # Inicia em produção ``` 
 
-# e2e tests
-$ npm run test:e2e
+🔧 Useful Scripts 
 
-# test coverage
-$ npm run test:cov
-```
+```bash npx prisma studio # Editor visual do banco docker compose down # Para e remove containers npm run migrate:dev # Roda migrações Prisma (db deve estar ativo) ``` 
 
-## Deployment
+📂 Project Structure project/ src/ modules/ shared/ main.ts prisma/ schema.prisma test/ docker-compose.yml 🤝 Contributing 
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```bash git checkout -b feature/NewFeature git commit -m "Add feature" git push origin feature/NewFeature ```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+📄 License MIT License ❤️
 
 ## Resources
 
