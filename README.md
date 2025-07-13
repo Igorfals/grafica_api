@@ -25,32 +25,28 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-Project setup
-bash
+## Project setup
+
+```bash
 $ npm install
-Before continuing, make sure PostgreSQL is installed and running locally or via Docker. You can download it here or use the steps below to run it with Docker.
+```
 
-Compile and run the project
-bash
-# Start PostgreSQL and other services using Docker
-$ docker compose up -d
+## Compile and run the project
 
-# Check if containers are running
-$ docker ps
-
+```bash
 # development
 $ npm run start
 
-# watch mode (recommended for active development)
+# watch mode
 $ npm run start:dev
-
-# Apply Prisma migration with the name 'init'
-$ npm run migrate:dev
 
 # production mode
 $ npm run start:prod
-Run tests
-bash
+```
+
+## Run tests
+
+```bash
 # unit tests
 $ npm run test
 
@@ -59,14 +55,20 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
-Deployment
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the deployment documentation for more information.
+```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out Mau, our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Deployment
 
-bash
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+
+```bash
 $ npm install -g mau
 $ mau deploy
+```
+
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
 ## Resources
 
