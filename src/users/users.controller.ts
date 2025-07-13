@@ -7,11 +7,12 @@ import {
   Delete,
   Query,
   Put,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { IsPublic } from 'src/auth/decorators/is-public-decorator';
 import { FilterUserDto } from './dto/filter-user.dto';
 
@@ -20,15 +21,37 @@ import { FilterUserDto } from './dto/filter-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiBody({
-    type: CreateUserDto,
-    description: 'Objeto para criação de um novo usuário',
+  @ApiOperation({ summary: 'Criar novo usuário' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Usuário criado com sucesso',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Dados inválidos',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Não autorizado',
   })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiQuery({
+    name: 'name',
+    required: false,
+    description: 'Filtrar usuários pelo nome',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'email',
+    required: false,
+    description: 'Filtrar usuários pelo email',
+    type: String,
+  })
   @Get()
   findAll(@Query() filters: FilterUserDto) {
     return this.usersService.findAll(filters);
