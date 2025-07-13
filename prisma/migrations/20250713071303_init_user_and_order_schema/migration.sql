@@ -19,7 +19,7 @@ CREATE TABLE "Order" (
     "city" TEXT NOT NULL,
     "is_order" BOOLEAN NOT NULL DEFAULT true,
     "items" JSONB NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "cod_user" INTEGER NOT NULL,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id_order")
 );
@@ -28,4 +28,4 @@ CREATE TABLE "Order" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Order" ADD CONSTRAINT "Order_cod_user_fkey" FOREIGN KEY ("cod_user") REFERENCES "User"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;

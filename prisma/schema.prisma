@@ -18,15 +18,15 @@ model User {
 
 model Order {
   id          Int      @id @default(autoincrement()) @map("id_order")
-  clientName  String   @map("client_name")
+  client_name  String   @map("client_name")
   estimation  DateTime @map("estimation_date")
   date        DateTime @map("date")
   address     String
   cellphone   String
   city        String
-  isOrder     Boolean  @default(true) @map("is_order")
+  is_order     Boolean  @default(true) @map("is_order")
   items       Json
 
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  cod_user      Int  @map("cod_user")
+  user        User     @relation(fields: [cod_user], references: [id])
 }
