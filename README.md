@@ -27,27 +27,35 @@
 
 📦 Project Setup Pré-requisitos: - Node.js (v18+) - PostgreSQL (https://www.postgresql.org/download/) ou Docker Instalação: 
 
-```bash git clone https://github.com/seu-repo/project.git && cd project && npm install ``` 
-
 ⚙️ Running the Project 
 
-```bash docker compose up -d # Inicia containers npm run migrate:dev # Aplica migrações Prisma npm run start:dev # Inicia app com hot-reload docker ps # Verifica containers ativos ``` 
+```bash 
+$ npm install 
+```
 
-🧪 Testing 
+# Inicia containers
 
-```bash npm run test # Testes unitários npm run test:e2e # Testes end-to-end npm run test:cov # Cobertura de testes ``` 
+```bash 
+$ docker compose up -d
+``` 
 
-🚀 Production 
+# Verifica containers ativos 
 
-```bash npm run build # Compila para produção npm run start:prod # Inicia em produção ``` 
+```bash 
+$ docker ps
+```
 
-🔧 Useful Scripts 
+# Aplica migrações Prisma
 
-```bash npx prisma studio # Editor visual do banco docker compose down # Para e remove containers npm run migrate:dev # Roda migrações Prisma (db deve estar ativo) ``` 
+```bash 
+$ npm run migrate:dev
+```
 
-📂 Project Structure project/ src/ modules/ shared/ main.ts prisma/ schema.prisma test/ docker-compose.yml 🤝 Contributing 
+# Inicia app com hot-reload
 
-```bash git checkout -b feature/NewFeature git commit -m "Add feature" git push origin feature/NewFeature ```
+```bash 
+$ npm run start:dev
+```
 
 📄 License MIT License ❤️
 
