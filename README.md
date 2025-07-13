@@ -25,51 +25,48 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-📦 Project Setup
-npm install Install all dependencies defined in package.json.
+Project setup
+bash
+$ npm install
+Before continuing, make sure PostgreSQL is installed and running locally or via Docker. You can download it here or use the steps below to run it with Docker.
 
-PostgreSQL required Ensure you have PostgreSQL installed and running on your machine. You can download it from https://www.postgresql.org/download/ or install via Docker.
+Compile and run the project
+bash
+# Start PostgreSQL and other services using Docker
+$ docker compose up -d
 
-⚙️ Running the Project (Development Mode)
-docker compose up -d Starts the containers in detached mode (database and other services).
+# Check if containers are running
+$ docker ps
 
-docker ps Lists running containers — helpful for checking PostgreSQL status.
+# development
+$ npm run start
 
-npm run start:dev Starts the NestJS application in development mode with hot-reloading.
+# watch mode (recommended for active development)
+$ npm run start:dev
 
-npm run migrate:dev Applies the Prisma migration to the database using the name init.
+# Apply Prisma migration with the name 'init'
+$ npm run migrate:dev
 
-🧪 Testing
-npm run test Runs unit tests.
+# production mode
+$ npm run start:prod
+Run tests
+bash
+# unit tests
+$ npm run test
 
-npm run test:e2e Runs end-to-end integration tests.
+# e2e tests
+$ npm run test:e2e
 
-npm run test:cov Generates test coverage report.
+# test coverage
+$ npm run test:cov
+Deployment
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the deployment documentation for more information.
 
-🚀 Production Build & Run
-npm run build Compiles the application for production.
+If you are looking for a cloud-based platform to deploy your NestJS application, check out Mau, our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-npm run start:prod Starts the compiled app in production mode.
-
-🔧 Useful Scripts
-npm run migrate:dev Runs prisma migrate dev with the migration name init. Be sure your database is running.
-
-docker compose down Stops and removes Docker containers.
-
-npx prisma studio Opens Prisma’s visual data editor for managing your database.
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
+bash
 $ npm install -g mau
 $ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
 ## Resources
 
