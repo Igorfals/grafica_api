@@ -35,8 +35,15 @@ export class OrderService {
     });
   }
 
-  findAll(filter?: FilterOrderDto): Promise<Order[]> {
+  async findAll(filter?: FilterOrderDto): Promise<{
+    data: Order[];
+    total: number;
+  }> {
     const where: Prisma.OrderWhereInput = {};
+
+    if (filter?.id) {
+      where.id = filter.id;
+    }
     if (filter?.client_name) {
       where.client_name = {
         contains: filter.client_name,
@@ -44,30 +51,39 @@ export class OrderService {
       };
     }
     if (filter?.estimation) {
-      where.estimation = new Date(filter.estimation);
+      const baseDate = new Date(filter.estimation);
+      const nextDate = new Date(baseDate);
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      where.estimation = {
+        gte: baseDate,
+        lt: nextDate,
+      };
     }
     if (filter?.date) {
-      where.date = new Date(filter.date);
-    }
-    if (filter?.cellphone) {
-      where.city = {
-        contains: filter.city,
-        mode: 'insensitive',
+      const baseDate = new Date(filter.date);
+      const nextDate = new Date(baseDate);
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      where.date = {
+        gte: baseDate,
+        lt: nextDate,
       };
     }
-    if (filter?.city) {
-      where.city = {
-        contains: filter.city,
-        mode: 'insensitive',
-      };
-    }
-    if (filter?.is_order !== undefined) {
-      where.is_order = filter.is_order;
-    }
-    if (filter?.cod_user) {
-      where.cod_user = filter.cod_user;
-    }
-    return this.prisma.order.findMany({ where });
+    const [data, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip: filter?.offset,
+        take: filter?.limit,
+        orderBy: { date: 'desc' },
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    return {
+      data,
+      total,
+    };
   }
 
   findOne(id: number) {

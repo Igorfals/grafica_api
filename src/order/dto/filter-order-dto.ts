@@ -1,13 +1,17 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  IsBoolean,
-  IsDateString,
-  IsInt,
-} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsOptional, IsString, IsDateString, IsInt } from 'class-validator';
 
 export class FilterOrderDto {
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'ID do pedido',
+  })
+  @Transform(({ value }) => (!isNaN(+value) ? +value : undefined))
+  @IsOptional()
+  @IsInt({ message: 'id deve ser um número inteiro' })
+  id?: number;
+
   @ApiPropertyOptional({
     example: 'Maria Oliveira',
     description: 'Nome do cliente',
@@ -36,31 +40,20 @@ export class FilterOrderDto {
   date?: string;
 
   @ApiPropertyOptional({
-    example: '(77) 99999-1234',
-    description: 'Telefone do cliente',
-  })
-  @IsOptional()
-  @IsString()
-  cellphone?: string;
-
-  @ApiPropertyOptional({ example: 'Poções', description: 'Cidade do cliente' })
-  @IsOptional()
-  @IsString()
-  city?: string;
-
-  @ApiPropertyOptional({
-    example: true,
-    description: 'Filtrar por pedidos (true) ou orçamentos (false)',
-  })
-  @IsOptional()
-  @IsBoolean()
-  is_order?: boolean;
-
-  @ApiPropertyOptional({
     example: 1,
-    description: 'ID do usuário que criou o pedido',
+    description: 'Código do usuário associado ao pedido',
   })
+  @Transform(({ value }) => (!isNaN(+value) ? +value : undefined))
   @IsOptional()
-  @IsInt({ message: 'cod_user deve ser um número inteiro' })
-  cod_user?: number;
+  @IsInt({ message: 'limit deve ser um número inteiro' })
+  limit?: number;
+
+  @ApiPropertyOptional({
+    example: 0,
+    description: 'Deslocamento para paginação',
+  })
+  @Transform(({ value }) => (!isNaN(+value) ? +value : undefined))
+  @IsOptional()
+  @IsInt({ message: 'offset deve ser um número inteiro' })
+  offset?: number;
 }
