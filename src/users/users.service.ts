@@ -13,7 +13,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     if (await this.findByEmail(createUserDto.email)) {
       throw new BadRequestException(
-        'User creation failed. Please check your credentials.',
+        'Email already exists. Please use a different email.',
       );
     }
     const createdUser = await this.prisma.user.create({
@@ -69,7 +69,7 @@ export class UsersService {
   async update(updateUserDto: UpdateUserDto) {
     if (await this.findByEmail(updateUserDto.email)) {
       throw new BadRequestException(
-        'User creation failed. Please check your credentials.',
+        'Email already exists. Please use a different email.',
       );
     }
     if (!updateUserDto.id_user) {
