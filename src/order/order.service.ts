@@ -60,14 +60,10 @@ export class OrderService {
         lt: nextDate,
       };
     }
-    if (filter?.date) {
-      const baseDate = new Date(filter.date);
-      const nextDate = new Date(baseDate);
-      nextDate.setDate(nextDate.getDate() + 1);
-
+    if (filter?.dateStart && filter?.dateEnd) {
       where.date = {
-        gte: baseDate,
-        lt: nextDate,
+        gte: new Date(filter.dateStart),
+        lte: new Date(filter.dateEnd),
       };
     }
     const [data, total] = await Promise.all([

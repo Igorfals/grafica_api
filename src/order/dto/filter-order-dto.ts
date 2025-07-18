@@ -32,12 +32,23 @@ export class FilterOrderDto {
   estimation?: string;
 
   @ApiPropertyOptional({
-    example: '2025-07-13T10:30:00.000Z',
-    description: 'Data do pedido (formato ISO)',
+    example: '2025-07-13T00:00:00.000Z',
+    description: 'Data inicial do pedido (formato ISO)',
   })
   @IsOptional()
-  @IsDateString({}, { message: 'date deve estar em formato de data válida' })
-  date?: string;
+  @IsDateString(
+    {},
+    { message: 'dateStart deve estar em formato de data válida' },
+  )
+  dateStart?: string;
+
+  @ApiPropertyOptional({
+    example: '2025-07-17T23:59:59.000Z',
+    description: 'Data final do pedido (formato ISO)',
+  })
+  @IsOptional()
+  @IsDateString({}, { message: 'dateEnd deve estar em formato de data válida' })
+  dateEnd?: string;
 
   @ApiPropertyOptional({
     example: 1,
