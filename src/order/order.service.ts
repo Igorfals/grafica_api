@@ -61,9 +61,13 @@ export class OrderService {
       };
     }
     if (filter?.dateStart && filter?.dateEnd) {
+      const startDate = new Date(filter.dateStart);
+      const endDate = new Date(filter.dateEnd);
+      endDate.setDate(endDate.getDate() + 1);
+
       where.date = {
-        gte: new Date(filter.dateStart),
-        lte: new Date(filter.dateEnd),
+        gte: startDate,
+        lt: endDate,
       };
     }
     const [data, total] = await Promise.all([
