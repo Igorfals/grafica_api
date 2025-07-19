@@ -51,7 +51,7 @@ export class OrderService {
       };
     }
     if (filter?.estimation) {
-      const baseDate = new Date(filter.estimation);
+      const baseDate = new Date(`${filter.estimation}T00:00:00.000Z`);
       const nextDate = new Date(baseDate);
       nextDate.setDate(nextDate.getDate() + 1);
 
@@ -61,8 +61,8 @@ export class OrderService {
       };
     }
     if (filter?.dateStart && filter?.dateEnd) {
-      const startDate = new Date(filter.dateStart);
-      const endDate = new Date(filter.dateEnd);
+      const startDate = new Date(`${filter.dateStart}T00:00:00.000Z`);
+      const endDate = new Date(`${filter.dateEnd}T00:00:00.000Z`);
       endDate.setDate(endDate.getDate() + 1);
 
       where.date = {
