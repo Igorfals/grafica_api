@@ -14,15 +14,25 @@ export class AuthService {
   ) {}
 
   login(user: User): UserToken {
+    if (typeof user.id !== 'number') {
+      throw new Error('User ID is missing or invalid');
+    }
+
     const payload: UserPayload = {
       sub: user.id,
       email: user.email,
       name: user.name,
     };
 
-    const jwtToken = this.jwtService.sign(payload);
-
-    return { access_token: jwtToken };
+    const access_token = this.jwtService.sign(payload);
+    return {
+      access_token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    };
   }
 
   async validateUser(

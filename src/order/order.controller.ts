@@ -7,14 +7,16 @@ import {
   Delete,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { IsPublic } from 'src/auth/decorators/is-public-decorator';
 import { FilterOrderDto } from './dto/filter-order-dto';
-
-@IsPublic()
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth } from '@nestjs/swagger';
+@ApiBearerAuth('access-token')
+@UseGuards(AuthGuard('jwt'))
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

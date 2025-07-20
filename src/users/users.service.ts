@@ -88,6 +88,13 @@ export class UsersService {
   }
 
   async remove(id: number) {
+    if (!id) {
+      throw new BadRequestException('User ID is required for deletion.');
+    }
+    const userExists = await this.findOne(id);
+    if (!userExists) {
+      throw new BadRequestException('User not found.');
+    }
     await this.prisma.user.delete({
       where: { id },
     });
