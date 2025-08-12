@@ -5,6 +5,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterOrderDto } from './dto/filter-order-dto';
 import { Order, Prisma } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
+import {
+  parseSafeDate,
+  formatDateOnly,
+  getDateRange,
+} from 'src/common/utils/date.utils';
 
 @Injectable()
 export class OrderService {
@@ -15,14 +20,16 @@ export class OrderService {
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     const userExists = await this.user.findOne(createOrderDto.cod_user);
-    const estimation = new Date(createOrderDto.estimation);
-    const date = new Date(createOrderDto.date);
     if (!userExists) {
       throw new NotFoundException(
-        `cod_user ${createOrderDto.cod_user} not found`,
+        `cod_user ${createOrderDto.cod_user} não encontrado`,
       );
     }
+
+    const estimation = parseSafeDate(createOrderDto.estimation);
+    const date = parseSafeDate(createOrderDto.date);
     const { cod_user, ...orderData } = createOrderDto;
+
     return this.prisma.order.create({
       data: {
         ...orderData,
@@ -36,7 +43,7 @@ export class OrderService {
   }
 
   async findAll(filter?: FilterOrderDto): Promise<{
-    data: Order[];
+    data: any[];
     total: number;
   }> {
     const where: Prisma.OrderWhereInput = {};
@@ -44,33 +51,31 @@ export class OrderService {
     if (filter?.id) {
       where.id = filter.id;
     }
+
     if (filter?.client_name) {
       where.client_name = {
         contains: filter.client_name,
         mode: 'insensitive',
       };
     }
+
     if (filter?.estimation) {
-      const baseDate = new Date(`${filter.estimation}T00:00:00.000Z`);
-      const nextDate = new Date(baseDate);
-      nextDate.setDate(nextDate.getDate() + 1);
+      const estimationDate = parseSafeDate(filter.estimation);
+      const nextDay = new Date(estimationDate);
+      nextDay.setDate(nextDay.getDate() + 1);
 
       where.estimation = {
-        gte: baseDate,
-        lt: nextDate,
+        gte: estimationDate,
+        lt: nextDay,
       };
     }
-    if (filter?.dateStart && filter?.dateEnd) {
-      const startDate = new Date(`${filter.dateStart}T00:00:00.000Z`);
-      const endDate = new Date(`${filter.dateEnd}T00:00:00.000Z`);
-      endDate.setDate(endDate.getDate() + 1);
 
-      where.date = {
-        gte: startDate,
-        lt: endDate,
-      };
+    if (filter?.dateStart && filter?.dateEnd) {
+      const { gte, lte } = getDateRange(filter.dateStart, filter.dateEnd);
+      where.date = { gte, lte };
     }
-    const [data, total] = await Promise.all([
+
+    const [rawData, total] = await Promise.all([
       this.prisma.order.findMany({
         where,
         skip: filter?.offset,
@@ -80,10 +85,13 @@ export class OrderService {
       this.prisma.order.count({ where }),
     ]);
 
-    return {
-      data,
-      total,
-    };
+    const data = rawData.map((order) => ({
+      ...order,
+      estimation: formatDateOnly(order.estimation),
+      date: formatDateOnly(order.date),
+    }));
+
+    return { data, total };
   }
 
   findOne(id: number) {
@@ -96,7 +104,7 @@ export class OrderService {
     const userExists = await this.user.findOne(updateOrderDto.cod_user);
     if (!userExists) {
       throw new NotFoundException(
-        `cod_user ${updateOrderDto.cod_user} not found`,
+        `cod_user ${updateOrderDto.cod_user} não encontrado`,
       );
     }
 
@@ -106,8 +114,8 @@ export class OrderService {
       where: { id: id_order },
       data: {
         ...orderData,
-        ...(estimation && { estimation: new Date(estimation) }),
-        ...(date && { date: new Date(date) }),
+        ...(estimation && { estimation: parseSafeDate(estimation) }),
+        ...(date && { date: parseSafeDate(date) }),
       },
     });
   }
@@ -116,6 +124,6 @@ export class OrderService {
     await this.prisma.order.delete({
       where: { id },
     });
-    return { message: 'Order deleted successfully' };
+    return { message: 'Pedido deletado com sucesso' };
   }
 }
