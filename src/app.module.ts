@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config'; // ← importar
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -9,7 +10,16 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth-guard';
 import { OrderModule } from './order/order.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, OrderModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env', // caminho do seu arquivo
+      isGlobal: true,      // disponível no app todo
+    }),
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    OrderModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
