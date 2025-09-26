@@ -67,17 +67,21 @@ export class UsersService {
   }
 
   async update(updateUserDto: UpdateUserDto) {
-    if (await this.findByEmail(updateUserDto.email)) {
+    if (!updateUserDto.id) {
+      throw new BadRequestException('Missing user ID for update.');
+    }
+
+    const existingUser = await this.findByEmail(updateUserDto.email);
+    if (existingUser && existingUser.id !== updateUserDto.id) {
       throw new BadRequestException(
         'Email already exists. Please use a different email.',
       );
     }
-    if (!updateUserDto.id_user) {
-      throw new BadRequestException('Missing user ID for update.');
-    }
-    const { id_user, ...data } = updateUserDto;
+
+    const { id, ...data } = updateUserDto;
+
     return this.prisma.user.update({
-      where: { id: id_user },
+      where: { id },
       data: {
         ...data,
         password: data.password
