@@ -42,8 +42,8 @@ export class UsersController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Não autorizado',
   })
-  @IsPublic()
   @Post()
+  @IsPublic()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

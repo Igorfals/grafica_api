@@ -29,4 +29,12 @@ export class CreateUserDto {
   @IsString({ message: 'O campo senha deve ser uma string' })
   @MinLength(8, { message: 'A senha deve ter no mínimo 8 caracteres' })
   password: string;
+
+  @ApiProperty({
+    description: 'Chave de acesso para autorização da criação',
+    example: 'super-secret-key-123',
+  })
+  @IsNotEmpty({ message: 'O campo accessKey não pode estar vazio' })
+  @IsString({ message: 'O campo accessKey deve ser uma string' })
+  accessKey: string;
 }
