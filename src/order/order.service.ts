@@ -80,7 +80,7 @@ export class OrderService {
         where,
         skip: filter?.offset,
         take: filter?.limit,
-        orderBy: { date: 'desc' },
+        orderBy: { created_at: 'desc' },
       }),
       this.prisma.order.count({ where }),
     ]);
@@ -108,14 +108,16 @@ export class OrderService {
       );
     }
 
-    const { id_order, estimation, date, ...orderData } = updateOrderDto;
+    const { id, estimation, date, ...orderData } = updateOrderDto;
 
     return this.prisma.order.update({
-      where: { id: id_order },
+      where: { id },
       data: {
         ...orderData,
-        ...(estimation && { estimation: parseSafeDate(estimation) }),
-        ...(date && { date: parseSafeDate(date) }),
+        ...(estimation && {
+          estimation: parseSafeDate(estimation.split('T')[0]),
+        }),
+        ...(date && { date: parseSafeDate(date.split('T')[0]) }),
       },
     });
   }
@@ -124,6 +126,6 @@ export class OrderService {
     await this.prisma.order.delete({
       where: { id },
     });
-    return { message: 'Pedido deletado com sucesso' };
+    return { message: 'Order successfully deleted.' };
   }
 }
