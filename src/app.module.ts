@@ -13,7 +13,7 @@ import { OrderModule } from './order/order.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env', // caminho do seu arquivo
-      isGlobal: true,      // disponível no app todo
+      isGlobal: true, // disponível no app todo
     }),
     PrismaModule,
     UsersModule,
