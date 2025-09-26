@@ -3,11 +3,16 @@
  * Lança erro se a data for inválida.
  */
 export function parseSafeDate(dateStr: string): Date {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  if (isNaN(date.getTime())) {
+  const date = new Date(dateStr);
+
+  if (
+    isNaN(date.getTime()) ||
+    typeof dateStr !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}(T.*)?$/.test(dateStr)
+  ) {
     throw new Error(`Data inválida: ${dateStr}`);
   }
+
   return date;
 }
 
