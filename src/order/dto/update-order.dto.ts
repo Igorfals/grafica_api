@@ -15,8 +15,8 @@ export class UpdateOrderDto {
     example: 1,
   })
   @IsOptional()
-  @IsInt({ message: 'O campo id_order deve ser um número inteiro' })
-  id_order?: number;
+  @IsInt({ message: 'O campo id deve ser um número inteiro' })
+  id?: number;
 
   @ApiPropertyOptional({
     description: 'Nome do cliente',

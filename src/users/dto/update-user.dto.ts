@@ -14,9 +14,9 @@ export class UpdateUserDto {
     example: 1,
   })
   @IsOptional()
-  @IsInt({ message: 'O campo id_user deve ser um número inteiro' })
-  @Min(1, { message: 'O id_user deve ser maior que zero' })
-  id_user?: number;
+  @IsInt({ message: 'O campo id deve ser um número inteiro' })
+  @Min(1, { message: 'O id deve ser maior que zero' })
+  id?: number;
 
   @ApiProperty({
     description: 'Nome do usuário',
