@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id       Int     @id @default(autoincrement()) @map("id_user")
+  id       Int     @id @default(autoincrement())
   name     String
   email    String  @unique
   password String
@@ -17,10 +17,12 @@ model User {
 }
 
 model Order {
-  id          Int      @id @default(autoincrement()) @map("id_order")
-  client_name  String   @map("client_name")
-  estimation  DateTime @map("estimation_date")
-  date        DateTime @map("date")
+  id          Int      @id @default(autoincrement())
+  client_name  String  @map("client_name")
+  estimation  DateTime @map("estimation_date") @db.Date
+  date        DateTime @db.Date
+  created_at  DateTime @default(now()) @map("created_at")
+  updated_at  DateTime @updatedAt @map("updated_at")
   address     String
   cellphone   String
   city        String
