@@ -1,22 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+// 1. Importe o ConfigService
+import { ConfigService } from '@nestjs/config';
 import { UserFromJwt } from '../models/user-from-jtw';
 import { UserPayload } from '../models/user-payload';
-import * as process from 'process';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
-    const jwtSecret = process.env.JWT_SECRET;
+  // 2. Injete o ConfigService no construtor
+  constructor(private readonly configService: ConfigService) {
+    // 3. Obtenha a variável de ambiente de forma segura
+    const jwtSecret = configService.get<string>('JWT_SECRET');
+
     if (!jwtSecret) {
-      throw new Error('JWT_SECRET is not defined');
+      // Mensagem de erro mais clara para o deploy
+      throw new Error(
+        'JWT_SECRET não está definido. Verifique suas variáveis de ambiente no Railway.',
+      );
     }
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtSecret,
+      secretOrKey: jwtSecret, // Usa o valor seguro lido pelo ConfigService
     });
   }
 

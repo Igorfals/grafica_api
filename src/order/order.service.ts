@@ -80,7 +80,7 @@ export class OrderService {
         where,
         skip: filter?.offset,
         take: filter?.limit,
-        orderBy: { created_at: 'desc' },
+        //orderBy: { created_at: 'desc' },
       }),
       this.prisma.order.count({ where }),
     ]);
