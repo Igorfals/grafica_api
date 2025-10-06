@@ -20,7 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       // Importe o ConfigModule para que ele possa ser injetado abaixo
       imports: [ConfigModule],
       // Use useFactory para carregar as opções de forma assíncrona
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         // Carrega JWT_SECRET (agora de forma segura)
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
