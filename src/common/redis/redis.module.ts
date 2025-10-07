@@ -10,11 +10,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       provide: 'REDIS',
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        return new Redis({
-          host: configService.get<string>('REDISHOST'),
-          port: configService.get<number>('REDISPORT'),
-          password: configService.get<string>('REDIS_PASSWORD')
-        });
+        const redisUrl = configService.get<string>('REDIS_URL');
+
+        if (!redisUrl) {
+          throw new Error(
+            '❌ Variável REDIS_URL não encontrada! Certifique-se de que ela está definida nas variáveis de ambiente.'
+          );
+        }
+
+        return new Redis(redisUrl);
       },
     },
   ],
