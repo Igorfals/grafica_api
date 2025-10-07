@@ -12,8 +12,10 @@ import { PrismaModule } from './prisma/prisma.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env', // caminho do seu arquivo
+      envFilePath: ['.env.local', '.env'], // tenta .env.local primeiro, depois .env
       isGlobal: true, // disponível no app todo
+      ignoreEnvFile: process.env.NODE_ENV === 'production', // ignora .env em produção (Railway)
+      cache: true, // cache das variáveis para melhor performance
     }),
     PrismaModule,
     UsersModule,

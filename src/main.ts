@@ -8,8 +8,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  // Debug: Verificar variáveis de ambiente críticas
+  console.log('🔍 Verificando variáveis de ambiente...');
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('DATABASE_URL:', process.env.DATABASE_URL ? '✅ Definida' : '❌ Não definida');
+  console.log('REDIS_URL:', process.env.REDIS_URL ? '✅ Definida' : '❌ Não definida');
+  console.log('JWT_SECRET:', process.env.JWT_SECRET ? '✅ Definida' : '❌ Não definida');
+  console.log('PORT:', process.env.PORT || '3000 (padrão)');
+
   app.enableCors({
-    origin: configService.get<string>('PAINEL_URL'),
+    origin: configService.get<string>('PAINEL_URL') || '*', // fallback para * se não definido
     credentials: true,
   });
 

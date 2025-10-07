@@ -1,14 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-import { ConfigService } from '@nestjs/config';
+import { Global, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaService } from './prisma.service';
 
-@Injectable()
-export class PrismaService extends PrismaClient {
-  constructor(configService: ConfigService) {
-    const dbUrl = configService.get<string>('DATABASE_URL');
-    if (!dbUrl) throw new Error('DATABASE_URL não definida');
-    super({ datasources: { db: { url: dbUrl } } });
-  }
-}
-
+@Global()
+@Module({
+  imports: [ConfigModule],
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
 export class PrismaModule {}
