@@ -9,7 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     {
       provide: 'REDIS',
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      useFactory: async (configService: ConfigService) => {
         const redisUrl = configService.get<string>('REDIS_URL');
 
         if (!redisUrl) {
