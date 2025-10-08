@@ -7,6 +7,8 @@ import {
   IsDateString,
   IsInt,
   IsArray,
+  IsNumber,
+  Min,
 } from 'class-validator';
 
 export class UpdateOrderDto {
@@ -91,15 +93,21 @@ export class UpdateOrderDto {
   @ApiPropertyOptional({
     description: 'Preço total do pedido',
     example: 150.50,
+    minimum: 0
   })
   @IsOptional()
+  @IsNumber({}, { message: 'O campo total_price deve ser um número' })
+  @Min(0, { message: 'O campo total_price deve ser maior ou igual a zero' })
   total_price?: number;
 
   @ApiPropertyOptional({
     description: 'Total de produtos no pedido',
     example: 25,
+    minimum: 0
   })
   @IsOptional()
+  @IsNumber({}, { message: 'O campo total_products deve ser um número' })
+  @Min(0, { message: 'O campo total_products deve ser maior ou igual a zero' })
   total_products?: number;
 
   @ApiPropertyOptional({

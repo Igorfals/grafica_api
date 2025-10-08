@@ -7,6 +7,8 @@ import {
   IsInt,
   IsArray,
   Matches,
+  IsNumber,
+  Min,
 } from 'class-validator';
 
 export class CreateOrderDto {
@@ -57,12 +59,24 @@ export class CreateOrderDto {
   @IsArray({ message: 'O campo items deve ser um array' })
   items: any;
 
-  @ApiProperty({ example: 150.50, description: 'Preço total do pedido' })
-  @IsNotEmpty({ message: 'O campo total_price não pode estar vazio' })
+  @ApiProperty({ 
+    example: 150.50, 
+    description: 'Preço total do pedido (obrigatório)',
+    minimum: 0
+  })
+  @IsNotEmpty({ message: 'O campo total_price é obrigatório' })
+  @IsNumber({}, { message: 'O campo total_price deve ser um número' })
+  @Min(0, { message: 'O campo total_price deve ser maior ou igual a zero' })
   total_price: number;
 
-  @ApiProperty({ example: 25, description: 'Total de produtos no pedido' })
-  @IsNotEmpty({ message: 'O campo total_products não pode estar vazio' })
+  @ApiProperty({ 
+    example: 25, 
+    description: 'Total de produtos no pedido (obrigatório)',
+    minimum: 0
+  })
+  @IsNotEmpty({ message: 'O campo total_products é obrigatório' })
+  @IsNumber({}, { message: 'O campo total_products deve ser um número' })
+  @Min(0, { message: 'O campo total_products deve ser maior ou igual a zero' })
   total_products: number;
 
   @ApiProperty({ example: 1 })

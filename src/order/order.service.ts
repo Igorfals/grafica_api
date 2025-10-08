@@ -19,7 +19,7 @@ export class OrderService {
     private readonly user: UsersService,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+  async create(createOrderDto: CreateOrderDto): Promise<any> {
     const userExists = await this.user.findOne(createOrderDto.cod_user);
     if (!userExists) {
       throw new NotFoundException(
@@ -31,7 +31,7 @@ export class OrderService {
     const date = parseSafeDate(createOrderDto.date);
     const { cod_user, ...orderData } = createOrderDto;
 
-    return this.prisma.order.create({
+    const createdOrder = await this.prisma.order.create({
       data: {
         ...orderData,
         estimation,
@@ -41,6 +41,12 @@ export class OrderService {
         },
       },
     });
+
+    return {
+      ...createdOrder,
+      total_price: Number(createdOrder.total_price || 0),
+      total_products: Number((createdOrder as any).total_products || 0),
+    };
   }
 
   async findAll(filter?: FilterOrderDto): Promise<{
@@ -94,15 +100,27 @@ export class OrderService {
       ...order,
       estimation: formatDateOnly(order.estimation),
       date: formatDateOnly(order.date),
+      total_price: Number(order.total_price || 0),
+      total_products: Number((order as any).total_products || 0),
     }));
 
     return { data, total };
   }
 
-  findOne(id: number) {
-    return this.prisma.order.findUnique({
+  async findOne(id: number) {
+    const order = await this.prisma.order.findUnique({
       where: { id },
     });
+
+    if (!order) {
+      return null;
+    }
+
+    return {
+      ...order,
+      total_price: Number(order.total_price || 0),
+      total_products: Number((order as any).total_products || 0),
+    };
   }
 
   async update(updateOrderDto: UpdateOrderDto) {
@@ -115,7 +133,7 @@ export class OrderService {
 
     const { id, estimation, date, ...orderData } = updateOrderDto;
 
-    return this.prisma.order.update({
+    const updatedOrder = await this.prisma.order.update({
       where: { id },
       data: {
         ...orderData,
@@ -125,6 +143,12 @@ export class OrderService {
         ...(date && { date: parseSafeDate(date.split('T')[0]) }),
       },
     });
+
+    return {
+      ...updatedOrder,
+      total_price: Number(updatedOrder.total_price || 0),
+      total_products: Number((updatedOrder as any).total_products || 0),
+    };
   }
 
   async remove(id: number) {
