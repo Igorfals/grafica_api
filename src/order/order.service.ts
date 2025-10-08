@@ -3,6 +3,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterOrderDto } from './dto/filter-order-dto';
+import { OrderStatsDto } from './dto/order-stats.dto';
 import { Order, Prisma } from '@prisma/client';
 import { UsersService } from 'src/users/users.service';
 import {
@@ -75,12 +76,16 @@ export class OrderService {
       where.date = { gte, lte };
     }
 
+    if (filter?.is_order !== undefined) {
+      where.is_order = filter.is_order;
+    }
+
     const [rawData, total] = await Promise.all([
       this.prisma.order.findMany({
         where,
         skip: filter?.offset,
         take: filter?.limit,
-        //orderBy: { created_at: 'desc' },
+        orderBy: { created_at: 'desc' },
       }),
       this.prisma.order.count({ where }),
     ]);
@@ -127,5 +132,41 @@ export class OrderService {
       where: { id },
     });
     return { message: 'Order successfully deleted.' };
+  }
+
+  async getStats(): Promise<OrderStatsDto> {
+    // Usar agregação do banco para calcular estatísticas diretamente - MUITO MAIS EFICIENTE!
+    const [ordersStats, ordersCount, budgetsCount] = await Promise.all([
+      // Estatísticas apenas dos pedidos (is_order = true)
+      this.prisma.order.aggregate({
+        where: {
+          is_order: true,
+        },
+        _sum: {
+          total_price: true,
+          total_products: true,
+        } as any
+      }),
+      // Contagem de pedidos (is_order = true)
+      this.prisma.order.count({
+        where: {
+          is_order: true,
+        },
+      }),
+      // Contagem de orçamentos (is_order = false)
+      this.prisma.order.count({
+        where: {
+          is_order: false,
+        },
+      }),
+    ]);
+
+    return {
+      totalOrders: ordersCount,
+      totalBudgets: budgetsCount,
+      totalRevenue: Number(((ordersStats._sum as any)?.total_price || 0).toFixed(2)),
+      totalProducts: Number((ordersStats._sum as any)?.total_products || 0),
+      lastUpdated: new Date(),
+    };
   }
 }

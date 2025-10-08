@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
@@ -12,23 +12,23 @@ model User {
   name     String
   email    String  @unique
   password String
-
-  orders   Order[] // Um usuário pode ter vários pedidos
+  orders   Order[]
 }
 
 model Order {
-  id          Int      @id @default(autoincrement())
-  client_name  String  @map("client_name")
-  estimation  DateTime @map("estimation_date") @db.Date
-  date        DateTime @db.Date
-  created_at  DateTime @default(now()) @map("created_at")
-  updated_at  DateTime @updatedAt @map("updated_at")
-  address     String
-  cellphone   String
-  city        String
-  is_order     Boolean  @default(true) @map("is_order")
-  items       Json
-
-  cod_user      Int  @map("cod_user")
-  user        User     @relation(fields: [cod_user], references: [id])
+  id            Int      @id @default(autoincrement())
+  client_name   String   @map("client_name")
+  estimation    DateTime @map("estimation_date")
+  date          DateTime
+  address       String
+  cellphone     String
+  city          String
+  is_order      Boolean  @default(true) @map("is_order")
+  items         Json
+  cod_user      Int      @map("cod_user")
+  updated_at    DateTime @default(now()) @updatedAt @map("updated_at")
+  created_at    DateTime @default(now()) @map("created_at")
+  total_price   Decimal  @default(0) @map("total_price") @db.Decimal
+  total_products Decimal @default(0) @map("total_products") @db.Decimal
+  user          User     @relation(fields: [cod_user], references: [id])
 }

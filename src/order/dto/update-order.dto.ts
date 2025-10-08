@@ -89,6 +89,20 @@ export class UpdateOrderDto {
   items: any;
 
   @ApiPropertyOptional({
+    description: 'Preço total do pedido',
+    example: 150.50,
+  })
+  @IsOptional()
+  total_price?: number;
+
+  @ApiPropertyOptional({
+    description: 'Total de produtos no pedido',
+    example: 25,
+  })
+  @IsOptional()
+  total_products?: number;
+
+  @ApiPropertyOptional({
     description: 'ID do usuário responsável pelo pedido',
     example: 1,
   })

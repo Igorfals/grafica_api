@@ -8,6 +8,8 @@ export class Order {
   city: string;
   is_ordered: boolean;
   items: any[];
+  total_price: number;
+  total_products: number;
   cod_user: number;
   total: number;
 }

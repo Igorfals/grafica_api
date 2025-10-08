@@ -57,6 +57,14 @@ export class CreateOrderDto {
   @IsArray({ message: 'O campo items deve ser um array' })
   items: any;
 
+  @ApiProperty({ example: 150.50, description: 'Preço total do pedido' })
+  @IsNotEmpty({ message: 'O campo total_price não pode estar vazio' })
+  total_price: number;
+
+  @ApiProperty({ example: 25, description: 'Total de produtos no pedido' })
+  @IsNotEmpty({ message: 'O campo total_products não pode estar vazio' })
+  total_products: number;
+
   @ApiProperty({ example: 1 })
   @IsNotEmpty({ message: 'O campo cod_user não pode estar vazio' })
   @IsInt({ message: 'O campo cod_user deve ser um número inteiro' })

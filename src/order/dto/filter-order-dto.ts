@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsOptional, IsString, IsDateString, IsInt } from 'class-validator';
+import { IsOptional, IsString, IsDateString, IsInt, IsBoolean } from 'class-validator';
 
 export class FilterOrderDto {
   @ApiPropertyOptional({
@@ -49,6 +49,19 @@ export class FilterOrderDto {
   @IsOptional()
   @IsDateString({}, { message: 'dateEnd deve estar em formato de data válida' })
   dateEnd?: string;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Filtrar por tipo: true para pedidos, false para orçamentos',
+  })
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return undefined;
+  })
+  @IsOptional()
+  @IsBoolean({ message: 'is_order deve ser um valor booleano' })
+  is_order?: boolean;
 
   @ApiPropertyOptional({
     example: 1,
